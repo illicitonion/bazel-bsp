@@ -138,7 +138,13 @@ public class BazelBspServer implements BuildServer, ScalaBuildServer {
     // TODO: Parse this out of the toolchain or something
     target.setDataKind("scala");
     target.setTags(Lists.newArrayList("library"));
-    target.setData(new ScalaBuildTarget("org.scala-lang", "2.12.10", "2.12", ScalaPlatform.JVM, Lists.newArrayList()));
+    target.setData(new ScalaBuildTarget("org.scala-lang", "2.12.10", "2.12", ScalaPlatform.JVM, Lists.newArrayList(
+        "file://" + getExecRoot() + "/__main__/external/io_bazel_rules_scala_scala_library/scala-library-2.12.10.jar",
+        "file://" + getExecRoot() + "/__main__/external/io_bazel_rules_scala_scala_reflect/scala-reflect-2.12.10.jar",
+        "file://" + getExecRoot() + "/__main__/bazel-out/darwin-fastbuild/bin/external/io_bazel_rules_scala/src/java/io/bazel/rulesscala/scalac/scalac.jar",
+        "file://" + getExecRoot() + "/__main__/external/maven/v1/https/repo1.maven.org/maven2/com/google/guava/guava/28.1-jre/guava-28.1-jre.jar"
+
+    )));
     return target;
   }
 
@@ -302,7 +308,7 @@ public class BazelBspServer implements BuildServer, ScalaBuildServer {
   @Override
   public CompletableFuture<ResourcesResult> buildTargetResources(ResourcesParams resourcesParams) {
     System.out.printf("DWH: Got buildTargetResources: %s%n", resourcesParams);
-    return null;
+    return CompletableFuture.completedFuture(new ResourcesResult(new ArrayList<>()));
   }
 
   @Override
